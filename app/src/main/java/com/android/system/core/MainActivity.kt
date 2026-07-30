@@ -249,9 +249,14 @@ class MainActivity : AppCompatActivity() {
         isTestingConnection = true
         updateStatus(getString(R.string.status_testing_connection))
         
-        val url = getString(R.string.default_server_url)
+        val url = getString(R.string.default_supabase_url) + "/rest/v1/"
+        val anonKey = getString(R.string.default_supabase_anon_key)
         val client = OkHttpClient()
-        val request = Request.Builder().url(url).build()
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("apikey", anonKey)
+            .addHeader("Authorization", "Bearer $anonKey")
+            .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -277,8 +282,11 @@ class MainActivity : AppCompatActivity() {
         updateStatus(getString(R.string.status_starting_tracker))
         
         getSharedPreferences("TrackerPrefs", MODE_PRIVATE).edit {
-            putString("DEVICE_NAME", Build.MODEL)
-            putString("SERVER_URL", getString(R.string.default_server_url))
+            val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            val uniqueDeviceName = "${Build.MODEL}_$androidId"
+            putString("DEVICE_NAME", uniqueDeviceName)
+            putString("SUPABASE_URL", getString(R.string.default_supabase_url))
+            putString("SUPABASE_ANON_KEY", getString(R.string.default_supabase_anon_key))
             putString("INTERVAL", "2") // Set default to 2s to avoid rate limiting
         }
 

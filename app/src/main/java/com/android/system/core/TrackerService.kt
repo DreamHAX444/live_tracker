@@ -61,10 +61,22 @@ class TrackerService : Service(), LifecycleOwner {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
-    private val client = OkHttpClient()
+    private val client by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("apikey", supabaseAnonKey)
+                    .addHeader("Authorization", "Bearer $supabaseAnonKey")
+                    .addHeader("Prefer", "return=minimal")
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
+    }
 
     private var deviceName: String = "System-Node"
-    private var serverUrl: String = "http://192.168.1.34:3000"
+    private var supabaseUrl: String = "https://your-project.supabase.co"
+    private var supabaseAnonKey: String = ""
     private var updateIntervalMs: Long = 2000L
     private var wakeLock: PowerManager.WakeLock? = null
     private var wifiLock: WifiManager.WifiLock? = null
@@ -271,8 +283,9 @@ class TrackerService : Service(), LifecycleOwner {
         
         val prefs = getSharedPreferences("TrackerPrefs", MODE_PRIVATE)
         deviceName = prefs.getString("DEVICE_NAME", "Unknown") ?: "Unknown"
-        val rawUrl = prefs.getString("SERVER_URL", "https://example.com") ?: "https://example.com"
-        serverUrl = rawUrl.trimEnd('/')
+        val rawUrl = prefs.getString("SUPABASE_URL", "https://your-project.supabase.co") ?: "https://your-project.supabase.co"
+        supabaseUrl = rawUrl.trimEnd('/')
+        supabaseAnonKey = prefs.getString("SUPABASE_ANON_KEY", "") ?: ""
 
         // Polished: Respect the interval preference with a safe minimum of 2 seconds to avoid rate limiting
         val intervalSec = prefs.getString("INTERVAL", "2")?.toLongOrNull() ?: 2L
@@ -509,7 +522,7 @@ class TrackerService : Service(), LifecycleOwner {
         val requestBody = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
 
         val request = Request.Builder()
-            .url("$serverUrl/api/location")
+            .url("$supabaseUrl/rest/v1/locations")
             .post(requestBody)
             .build()
 
@@ -540,7 +553,7 @@ class TrackerService : Service(), LifecycleOwner {
         isPollingCommands = true
 
         val request = Request.Builder()
-            .url("$serverUrl/api/command/pending?device_id=$deviceName")
+            .url("$supabaseUrl/rest/v1/commands?device_id=eq.${java.net.URLEncoder.encode(deviceName, "UTF-8")}&status=eq.pending")
             .get()
             .build()
 
@@ -554,15 +567,18 @@ class TrackerService : Service(), LifecycleOwner {
                 isPollingCommands = false
                 val bodyStr = response.body?.string() ?: ""
                 response.close()
-                if (response.isSuccessful && bodyStr.isNotEmpty()) {
+                if (response.isSuccessful && bodyStr.isNotEmpty() && bodyStr.trim().startsWith("[")) {
                     try {
-                        val json = JSONObject(bodyStr)
-                        if (json.optBoolean("success") && !json.isNull("command")) {
-                            val cmdObj = json.getJSONObject("command")
+                        val jsonArray = org.json.JSONArray(bodyStr)
+                        if (jsonArray.length() > 0) {
+                            val cmdObj = jsonArray.getJSONObject(0)
+                            val cmdId = cmdObj.optString("id")
                             val cmdType = cmdObj.optString("command")
                             val params = cmdObj.optJSONObject("params")
                             
                             Log.d("TrackerService", "CMD RECEIVED: $cmdType with params: $params")
+                            
+                            if (cmdId.isNotEmpty()) markCommandCompleted(cmdId)
                             
                             val durationSec = params?.optInt("duration_sec", 10) ?: 10
                             val fps = params?.optInt("fps", 1) ?: 1
