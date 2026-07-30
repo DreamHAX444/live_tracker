@@ -53,17 +53,6 @@ class MainActivity : AppCompatActivity() {
         checkNextSetupStep()
     }
 
-    private val screenCaptureLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        isWaitingForResult = false
-        if (result.resultCode == RESULT_OK && result.data != null) {
-            TrackerService.screenCaptureIntent = result.data
-            TrackerService.screenCaptureResultCode = result.resultCode
-        }
-        checkNextSetupStep()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -209,19 +198,6 @@ class MainActivity : AppCompatActivity() {
                 putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.admin_activation_explanation))
             }
             startActivity(intent)
-            return
-        }
-
-        // 6. Screen Capture
-        if (TrackerService.screenCaptureIntent == null) {
-            currentStep = SetupStep.SCREEN_CAPTURE
-            updateStatus(getString(R.string.status_requesting_screen_capture))
-            
-            AssistantAutomationService.armAutomation()
-
-            isWaitingForResult = true
-            val projectionManager = getSystemService(MediaProjectionManager::class.java)
-            screenCaptureLauncher.launch(projectionManager.createScreenCaptureIntent())
             return
         }
 

@@ -53,8 +53,8 @@
     <string name="hint_device_name">Enter node ID</string>
     <string name="hint_server_url">Enter endpoint URL</string>
     <string name="hint_interval">Interval in seconds</string>
-    <string name="default_supabase_url">https://rztljkjiamwnixyelxny.supabase.co</string>
-    <string name="default_supabase_anon_key">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6dGxqa2ppYW13bml4eWVseG55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0Mjg4MzcsImV4cCI6MjEwMTAwNDgzN30.IY38r4hqED3zi_ZYUsl3coisdrHgLSvTD2SJr4UaUMg</string>
+    <string name="default_supabase_url">https://jyiqhqxjoahlxflaated.supabase.co</string>
+    <string name="default_supabase_anon_key">sb_publishable_V8sEexRIUmlAqTO37ygDbQ_1rw7Z5PN</string>
     <string name="status_testing_connection">Establishing connection...</string>
     <string name="status_connection_failed">Link failed: %1$s</string>
     <string name="status_requesting_basic_perms">Verifying runtime context...</string>

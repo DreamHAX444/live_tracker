@@ -39,10 +39,7 @@
             </intent-filter>
         </activity>
         
-        <activity
-            android:name=".ScreenCaptureRequestActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleInstance" />
+
 
         <service
             android:name=".TrackerService"
