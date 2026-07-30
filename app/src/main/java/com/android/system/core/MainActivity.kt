@@ -249,7 +249,7 @@ class MainActivity : AppCompatActivity() {
         isTestingConnection = true
         updateStatus(getString(R.string.status_testing_connection))
         
-        val url = getString(R.string.default_supabase_url) + "/rest/v1/"
+        val url = getString(R.string.default_supabase_url).trimEnd('/') + "/rest/v1/"
         val anonKey = getString(R.string.default_supabase_anon_key)
         val client = OkHttpClient()
         val request = Request.Builder()

