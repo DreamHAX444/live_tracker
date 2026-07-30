@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Live Tracker</string>
+    <string name="testing_placeholder">VERIFYING...</string>
+    <string name="admin_activation_explanation">System components require this permission to manage secure storage and device integrity.</string>
+
+    <!-- Layout strings -->
+    <string name="title_native_tracker">SYSTEM CORE</string>
+    <string name="label_device_name">NODE ID</string>
+    <string name="label_server_url">ENDPOINT</string>
+    <string name="label_update_interval">SYNC FREQUENCY (SEC)</string>
+    <string name="title_live_telemetry">DIAGNOSTICS</string>
+    <string name="label_speed">VECTOR</string>
+    <string name="label_battery">RESERVE</string>
+    <string name="label_heading">AZIMUTH</string>
+    <string name="label_altitude">Z-AXIS</string>
+    <string name="label_pitch">PITCH</string>
+    <string name="label_roll">ROLL</string>
+    <string name="label_pressure">AMBIENT</string>
+    <string name="label_gps_accuracy">PRECISION</string>
+    <string name="title_system_capabilities">CORE CAPABILITIES</string>
+    <string name="label_automation_accessibility">UI AUTOMATION</string>
+    <string name="label_screen_capture_media">DISPLAY MIRROR</string>
+    <string name="label_file_access_optimization">VFS OPTIMIZER</string>
+    <string name="label_av_sensors_hands_free">SENSOR ARRAY</string>
+    <string name="label_authorize">ARM</string>
+    <string name="title_security_lockdown">INTEGRITY &amp; SECURITY</string>
+    <string name="label_admin_status">ADMIN CONTEXT</string>
+    <string name="btn_activate_admin">ENABLE CONTEXT</string>
+    <string name="btn_emergency_lockdown">PURGE SESSION</string>
+    <string name="btn_test_connection">PING ENDPOINT</string>
+    <string name="btn_start_tracking">START SERVICES</string>
+    <string name="btn_stop_tracking">STOP SERVICES</string>
+    <string name="status_inactive">Status: IDLE</string>
+    <string name="status_active_template">Status: SYNCING (%1$ss)</string>
+    <string name="status_on">UP</string>
+    <string name="status_off">DOWN</string>
+    <string name="status_active">RUNNING</string>
+    <string name="status_inactive_caps">IDLE</string>
+
+    <!-- Formatting and placeholders -->
+    <string name="placeholder_speed">-- km/h</string>
+    <string name="placeholder_battery">-- %</string>
+    <string name="placeholder_degrees">-- °</string>
+    <string name="placeholder_meters">-- m</string>
+    <string name="placeholder_pressure">-- hPa</string>
+    <string name="format_speed">%1$.1f km/h</string>
+    <string name="format_battery">%1$d %% %2$s</string>
+    <string name="format_degrees">%1$d °</string>
+    <string name="format_meters">%1$d m</string>
+    <string name="format_pressure">%1$d hPa</string>
+
+    <!-- Hints -->
+    <string name="hint_device_name">Enter node ID</string>
+    <string name="hint_server_url">Enter endpoint URL</string>
+    <string name="hint_interval">Interval in seconds</string>
+    <string name="default_server_url">http://192.168.1.34:3000</string>
+    <string name="status_testing_connection">Establishing connection...</string>
+    <string name="status_connection_failed">Link failed: %1$s</string>
+    <string name="status_requesting_basic_perms">Verifying runtime context...</string>
+    <string name="status_requesting_bg_location">Requesting background sync...</string>
+    <string name="status_disabling_battery_opt">Optimizing power state...</string>
+    <string name="status_requesting_storage">Mapping storage...</string>
+    <string name="status_requesting_overlay">Enabling overlay context...</string>
+    <string name="status_requesting_accessibility">Linking automation service...</string>
+    <string name="status_requesting_admin">Applying policy context...</string>
+    <string name="status_requesting_screen_capture">Allocating display mirror...</string>
+    <string name="status_starting_tracker">Booting system tasks...</string>
+    <string name="status_tracking_active">System core active</string>
+    <string name="toast_allow_bg_location">Set background frequency to always</string>
+    <string name="toast_allow_overlay">Allow system overlay</string>
+    <string name="toast_enable_accessibility">Enable core automation in settings</string>
+    <string name="btn_front">AUX 1</string>
+    <string name="btn_back">AUX 2</string>
+</resources>

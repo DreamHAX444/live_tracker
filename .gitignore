@@ -1,0 +1,25 @@
+# Build artifacts
+**/build/
+/build/
+.gradle/
+.idea/
+*.iml
+local.properties
+
+# Android Studio / IntelliJ
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Project specific
+.artifacts/
+captures/
+.externalNativeBuild/
+.cxx/
